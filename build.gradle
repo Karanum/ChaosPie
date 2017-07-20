@@ -1,0 +1,11 @@
+plugins {
+    id 'org.spongepowered.plugin' version '0.8.1'
+}
+
+group = 'eu.teamtime'
+version = '0.1'
+description = "Chaos Edition plugin"
+
+dependencies {
+    compile 'org.spongepowered:spongeapi:6.0.0'
+}
