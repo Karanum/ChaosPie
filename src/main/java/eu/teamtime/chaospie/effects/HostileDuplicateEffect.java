@@ -55,11 +55,11 @@ public class HostileDuplicateEffect implements IChaosEffect {
 		plugin.getLogger().info(e.getCause().toString());
 		if (!(e.getTargetEntity() instanceof Hostile)) return;
 		
+		Sponge.getCauseStackManager().addContext(EventContextKeys.SPAWN_TYPE, SpawnTypes.PLUGIN);
 		Living target = e.getTargetEntity();		
 		World w = target.getWorld();
 		Entity copy1 = w.createEntity(target.getType(), target.getLocation().getPosition());
 		Entity copy2 = w.createEntity(target.getType(), target.getLocation().getPosition());
-		Sponge.getCauseStackManager().addContext(EventContextKeys.SPAWN_TYPE, SpawnTypes.PLUGIN);
 //		SpawnCause c = SpawnCause.builder().type(SpawnTypes.PLUGIN).build();
 //		
 //		w.spawnEntity(copy1, Cause.source(c).build());
