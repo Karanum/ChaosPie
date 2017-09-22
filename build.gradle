@@ -7,5 +7,7 @@ version = '0.1'
 description = "Chaos Edition plugin"
 
 dependencies {
-    compile 'org.spongepowered:spongeapi:6.0.0'
+    compile 'org.spongepowered:spongeapi:7.0.0-SNAPSHOT'
 }
+
+apply plugin: "eclipse"

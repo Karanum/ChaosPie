@@ -1,6 +1,7 @@
 package eu.teamtime.chaospie;
 
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
@@ -33,16 +34,19 @@ public class ChaosPie {
 	
 	@Listener
 	public void onInit(GameInitializationEvent e) {
-		effects.add(new HeliumPunchEffect(this));
+		// TODO Make sure all effects are in
+		//effects.add(new HeliumPunchEffect(this));
+		effects.add(new HostileDuplicateEffect(this));
 	}
 	
 	@Listener
 	public void onPostInit(GamePostInitializationEvent e) {
+		// TODO Replace with the usual 2 minute delay
 		schedule = Task.builder()
 				.execute(() -> startRandomChaosEvent())
 				//.delay(2, TimeUnit.MINUTES)
 				.delay(10, TimeUnit.SECONDS)
-				.interval(1, TimeUnit.MINUTES)
+				.interval(2, TimeUnit.MINUTES)
 				.submit(this);
 	}
 	
@@ -54,11 +58,22 @@ public class ChaosPie {
 	
 	
 	private void startRandomChaosEvent() {
-		logger.info("Aaaeeaeaeae event");
-
 		stopCurrentEffect();
 		
-		activeEffect = effects.get(0);
+		// Select event by random and weight
+		int totalWeight = 0;
+		for (IChaosEffect effect : effects) {
+			totalWeight += effect.getWeight();
+		}
+		
+		long randWeight = (new Random()).nextInt(totalWeight);
+		for (IChaosEffect effect : effects) {
+			randWeight -= effect.getWeight();
+			if (randWeight <= 0) {
+				activeEffect = effect;
+				break;
+			}
+		}
 		
 		Sponge.getEventManager().registerListeners(this, activeEffect);
 		activeEffect.start();

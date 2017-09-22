@@ -40,7 +40,7 @@ public class HeliumPunchEffect implements IChaosEffect {
 	
 	@Override
 	public int lengthInSeconds() {
-		return 70;
+		return 30;
 	}
 	
 	@Override

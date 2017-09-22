@@ -1,7 +1,4 @@
 DEBUG.bat
 bin/*
 build/*
-
-.project
-.classpath
-.settings/*
+.gradle/*
