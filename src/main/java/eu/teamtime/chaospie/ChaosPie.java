@@ -44,6 +44,7 @@ public class ChaosPie {
 		// TODO Make sure all effects are in
 		//effects.add(new HeliumPunchEffect(this));
 		effects.add(new HostileDuplicateEffect(this));
+		effects.add(new SolarFlareEffect());
 	}
 	
 	@Listener
@@ -82,7 +83,8 @@ public class ChaosPie {
 			}
 		}
 		
-		Sponge.getEventManager().registerListeners(this, activeEffect);
+		if (activeEffect.containsListeners())
+			Sponge.getEventManager().registerListeners(this, activeEffect);
 		activeEffect.start();
 		
 		int length = activeEffect.lengthInSeconds();
@@ -95,7 +97,8 @@ public class ChaosPie {
 	
 	public void stopCurrentEffect() {
 		if (activeEffect == null) return;
-		Sponge.getEventManager().unregisterListeners(activeEffect);
+		if (activeEffect.containsListeners()) 
+			Sponge.getEventManager().unregisterListeners(activeEffect);
 		activeEffect.stop();
 		activeEffect = null;
 		

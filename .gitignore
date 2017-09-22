@@ -1,4 +1,10 @@
 DEBUG.bat
+TEST.bat
 bin/*
 build/*
 .gradle/*
+/bin/
+.classpath
+.project
+/.gradle/
+/build/
