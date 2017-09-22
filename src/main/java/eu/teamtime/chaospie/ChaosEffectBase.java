@@ -14,6 +14,7 @@ public abstract class ChaosEffectBase {
 	
 	public abstract int lengthInSeconds();
 	public abstract int getWeight();
+	public abstract String getName();
 	
 	protected void stopSelf() {
 		ChaosPie.instance().stopCurrentEffect();

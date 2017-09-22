@@ -50,6 +50,11 @@ public class HostileDuplicateEffect extends ChaosEffectBase {
 		return 30;
 	}
 	
+	@Override
+	public String getName() {
+		return "Duplicate Hostiles";
+	}
+	
 	@Listener
 	public void onEntityDeath(DestructEntityEvent.Death e, @First EntityDamageSource src) {
 		plugin.getLogger().info(e.getCause().toString());

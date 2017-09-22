@@ -87,6 +87,11 @@ public class SolarFlareEffect extends ChaosEffectBase {
 		return 10;
 	}
 	
+	@Override
+	public String getName() {
+		return "Solar Flare";
+	}
+	
 	private Collection<Entity> getEntitiesInSunlight() {
 		List<Entity> list = Sponge.getServer().getOnlinePlayers().stream().filter(p -> {
 			Location<World> loc = p.getLocation();

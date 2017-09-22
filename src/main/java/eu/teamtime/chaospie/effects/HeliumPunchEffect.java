@@ -48,6 +48,11 @@ public class HeliumPunchEffect extends ChaosEffectBase {
 		return 30;
 	}
 	
+	@Override
+	public String getName() {
+		return "Helium Punch";
+	}
+	
 	@Listener
 	public void onAttackEntity(DamageEntityEvent e, @First EntityDamageSource source) {
 		Entity target = e.getTargetEntity();
