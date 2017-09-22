@@ -18,9 +18,9 @@ import org.spongepowered.api.text.format.TextColors;
 import com.flowpowered.math.vector.Vector3d;
 
 import eu.teamtime.chaospie.ChaosPie;
-import eu.teamtime.chaospie.IChaosEffect;
+import eu.teamtime.chaospie.ChaosEffectBase;
 
-public class HeliumPunchEffect implements IChaosEffect {
+public class HeliumPunchEffect extends ChaosEffectBase {
 
 	private ChaosPie plugin;
 	

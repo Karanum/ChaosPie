@@ -20,9 +20,9 @@ import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.world.World;
 
 import eu.teamtime.chaospie.ChaosPie;
-import eu.teamtime.chaospie.IChaosEffect;
+import eu.teamtime.chaospie.ChaosEffectBase;
 
-public class HostileDuplicateEffect implements IChaosEffect {
+public class HostileDuplicateEffect extends ChaosEffectBase {
 
 	private ChaosPie plugin;
 	

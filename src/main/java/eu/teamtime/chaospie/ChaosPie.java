@@ -21,10 +21,15 @@ import eu.teamtime.chaospie.effects.*;
 @Plugin(id = "chaospie", name = "ChaosPie", version = "0.1")
 public class ChaosPie {
 	
+	private static ChaosPie instance;
+	public static ChaosPie instance() {
+		return instance;
+	}
+	
 	private Task schedule = null;
 	private Task effectTask = null;
-	private List<IChaosEffect> effects = Lists.newArrayList();
-	private IChaosEffect activeEffect = null;
+	private List<ChaosEffectBase> effects = Lists.newArrayList();
+	private ChaosEffectBase activeEffect = null;
 	
 	@Inject
 	private Logger logger;
@@ -34,6 +39,8 @@ public class ChaosPie {
 	
 	@Listener
 	public void onInit(GameInitializationEvent e) {
+		instance = this;
+		
 		// TODO Make sure all effects are in
 		//effects.add(new HeliumPunchEffect(this));
 		effects.add(new HostileDuplicateEffect(this));
@@ -62,12 +69,12 @@ public class ChaosPie {
 		
 		// Select event by random and weight
 		int totalWeight = 0;
-		for (IChaosEffect effect : effects) {
+		for (ChaosEffectBase effect : effects) {
 			totalWeight += effect.getWeight();
 		}
 		
 		long randWeight = (new Random()).nextInt(totalWeight);
-		for (IChaosEffect effect : effects) {
+		for (ChaosEffectBase effect : effects) {
 			randWeight -= effect.getWeight();
 			if (randWeight <= 0) {
 				activeEffect = effect;
@@ -86,7 +93,7 @@ public class ChaosPie {
 					.submit(this);
 	}
 	
-	private void stopCurrentEffect() {
+	public void stopCurrentEffect() {
 		if (activeEffect == null) return;
 		Sponge.getEventManager().unregisterListeners(activeEffect);
 		activeEffect.stop();
