@@ -12,6 +12,8 @@ import org.spongepowered.api.event.game.state.GamePostInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStoppingServerEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.scheduler.Task;
+import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.format.TextColors;
 
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
@@ -44,6 +46,7 @@ public class ChaosPie {
 		// TODO Make sure all effects are in
 		//effects.add(new HeliumPunchEffect(this));
 		effects.add(new HostileDuplicateEffect(this));
+		effects.add(new SolarFlareEffect());
 	}
 	
 	@Listener
@@ -53,7 +56,8 @@ public class ChaosPie {
 				.execute(() -> startRandomChaosEvent())
 				//.delay(2, TimeUnit.MINUTES)
 				.delay(10, TimeUnit.SECONDS)
-				.interval(2, TimeUnit.MINUTES)
+				//.interval(2, TimeUnit.MINUTES)
+				.interval(15, TimeUnit.SECONDS)
 				.submit(this);
 	}
 	
@@ -82,8 +86,10 @@ public class ChaosPie {
 			}
 		}
 		
-		Sponge.getEventManager().registerListeners(this, activeEffect);
+		if (activeEffect.containsListeners())
+			Sponge.getEventManager().registerListeners(this, activeEffect);
 		activeEffect.start();
+		Sponge.getServer().getConsole().sendMessage(Text.of(TextColors.RED, "Starting effect: ", TextColors.GOLD, activeEffect.getName()));
 		
 		int length = activeEffect.lengthInSeconds();
 		if (length > 0)
@@ -95,10 +101,12 @@ public class ChaosPie {
 	
 	public void stopCurrentEffect() {
 		if (activeEffect == null) return;
-		Sponge.getEventManager().unregisterListeners(activeEffect);
+		if (activeEffect.containsListeners()) 
+			Sponge.getEventManager().unregisterListeners(activeEffect);
 		activeEffect.stop();
-		activeEffect = null;
+		Sponge.getServer().getConsole().sendMessage(Text.of(TextColors.GREEN, "Stopping effect: ", TextColors.GOLD, activeEffect.getName()));
 		
+		activeEffect = null;
 		if (effectTask != null) {
 			effectTask.cancel();
 			effectTask = null;
