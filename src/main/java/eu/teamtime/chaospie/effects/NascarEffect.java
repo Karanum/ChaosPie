@@ -55,4 +55,9 @@ public class NascarEffect extends ChaosPotionBase {
 	protected Collection<PotionEffect> getPotionEffects() {
 		return effects;
 	}
+
+	@Override
+	public String getName() {
+		return "nAAAAAscAAAr";
+	}
 }

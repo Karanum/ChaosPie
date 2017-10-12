@@ -57,4 +57,9 @@ public class SpeedySpidersEffect extends ChaosPotionBase {
 	protected Collection<PotionEffect> getPotionEffects() {
 		return effects;
 	}
+
+	@Override
+	public String getName() {
+		return "Speedy Spiders";
+	}
 }

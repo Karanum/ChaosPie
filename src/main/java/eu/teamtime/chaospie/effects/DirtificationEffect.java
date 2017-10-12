@@ -83,4 +83,9 @@ public class DirtificationEffect extends ChaosEffectBase {
 	public int getWeight() {
 		return 30;
 	}
+
+	@Override
+	public String getName() {
+		return "Dirtification";
+	}
 }
