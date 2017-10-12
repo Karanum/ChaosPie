@@ -47,6 +47,7 @@ public class NascarEffect extends ChaosPotionBase {
 	}
 
 	@Override
+	@SuppressWarnings ("unchecked")
 	protected Collection<Player> getRelevantEntities() {
 		return Sponge.getServer().getOnlinePlayers();
 	}
