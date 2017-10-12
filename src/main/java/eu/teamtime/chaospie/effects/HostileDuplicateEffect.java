@@ -45,7 +45,12 @@ public class HostileDuplicateEffect extends ChaosEffectBase {
 	public int getWeight() {
 		return 30;
 	}
-
+	
+	@Override
+	public String getName() {
+		return "Duplicate Hostiles";
+	}
+	
 	@Listener
 	public void onEntityDeath(DestructEntityEvent.Death e, @First EntityDamageSource source, @Getter("getTargetEntity") Hostile target) {
 		if (!(source.getSource() instanceof Player)) return;

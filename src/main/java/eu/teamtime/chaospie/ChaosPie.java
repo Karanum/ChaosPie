@@ -12,6 +12,8 @@ import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.event.game.state.GameStoppingServerEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.scheduler.Task;
+import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.format.TextColors;
 
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
@@ -53,10 +55,11 @@ public class ChaosPie {
 		effects.add(new MiniCookEffect());
 		effects.add(new NascarEffect());
 		effects.add(new SpeedySpidersEffect());
+		effects.add(new SolarFlareEffect());
 	}
 	
 	@Listener
-	public void onPostInit(GameStartedServerEvent e) {
+	public void onServerStart(GameStartedServerEvent e) {
 		schedule = Task.builder()
 				.execute(this::startRandomChaosEvent)
 				.delay(10, TimeUnit.SECONDS)
@@ -92,8 +95,10 @@ public class ChaosPie {
 			}
 		}
 		
-		Sponge.getEventManager().registerListeners(this, activeEffect);
+		if (activeEffect.containsListeners())
+			Sponge.getEventManager().registerListeners(this, activeEffect);
 		activeEffect.start();
+		Sponge.getServer().getConsole().sendMessage(Text.of(TextColors.RED, "Starting effect: ", TextColors.GOLD, activeEffect.getName()));
 		
 		int length = activeEffect.lengthInSeconds();
 		if (length > 0)
@@ -106,10 +111,12 @@ public class ChaosPie {
 	
 	public void stopCurrentEffect() {
 		if (activeEffect == null) return;
-		Sponge.getEventManager().unregisterListeners(activeEffect);
+		if (activeEffect.containsListeners()) 
+			Sponge.getEventManager().unregisterListeners(activeEffect);
 		activeEffect.stop();
-		activeEffect = null;
+		Sponge.getServer().getConsole().sendMessage(Text.of(TextColors.GREEN, "Stopping effect: ", TextColors.GOLD, activeEffect.getName()));
 		
+		activeEffect = null;
 		if (stopper != null) {
 			stopper.cancel();
 			stopper = null;

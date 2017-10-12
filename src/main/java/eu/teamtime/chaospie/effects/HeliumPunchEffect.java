@@ -43,7 +43,12 @@ public class HeliumPunchEffect extends ChaosEffectBase {
 	public int getWeight() {
 		return 30;
 	}
-
+	
+	@Override
+	public String getName() {
+		return "Helium Punch";
+	}
+	
 	@Listener
 	public void onAttackEntity(DamageEntityEvent e, @First EntityDamageSource source, @Getter("getTargetEntity") Living target) {
 		if (source.getType().equals(DamageTypes.ATTACK)
