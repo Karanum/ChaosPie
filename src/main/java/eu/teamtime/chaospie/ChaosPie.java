@@ -49,13 +49,14 @@ public class ChaosPie {
 		instance = this;
 
 		// TODO Make sure all effects are in
-		effects.add(new FloatingEffect());
-		effects.add(new HeliumPunchEffect());
-		effects.add(new HostileDuplicateEffect());
-		effects.add(new MiniCookEffect());
-		effects.add(new NascarEffect());
-		effects.add(new SpeedySpidersEffect());
-		effects.add(new SolarFlareEffect());
+//		effects.add(new FloatingEffect());
+//		effects.add(new HeliumPunchEffect());
+//		effects.add(new HostileDuplicateEffect());
+//		effects.add(new MiniCookEffect());
+//		effects.add(new NascarEffect());
+//		effects.add(new SpeedySpidersEffect());
+//		effects.add(new SolarFlareEffect());
+		effects.add(new CakeCreeperEffect());
 	}
 	
 	@Listener
