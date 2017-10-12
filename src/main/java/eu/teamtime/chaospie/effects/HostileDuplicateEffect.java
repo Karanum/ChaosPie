@@ -1,35 +1,31 @@
 package eu.teamtime.chaospie.effects;
 
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.data.manipulator.mutable.entity.HealthData;
-import org.spongepowered.api.entity.Entity;
-import org.spongepowered.api.entity.EntitySnapshot;
-import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.entity.living.Hostile;
-import org.spongepowered.api.entity.living.Living;
+import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
-import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.event.cause.EventContextKeys;
 import org.spongepowered.api.event.cause.entity.damage.source.EntityDamageSource;
 import org.spongepowered.api.event.cause.entity.spawn.SpawnTypes;
 import org.spongepowered.api.event.entity.DestructEntityEvent;
+import org.spongepowered.api.event.filter.Getter;
 import org.spongepowered.api.event.filter.cause.First;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.channel.MessageChannel;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.world.World;
 
-import eu.teamtime.chaospie.ChaosPie;
 import eu.teamtime.chaospie.ChaosEffectBase;
+import eu.teamtime.chaospie.ChaosPie;
 
+/**
+ * Represents the "Hostile Duplication" chaos effect, which when activated
+ * causes any hostile mob slain by a player to spawn 2 copies of itself.
+ * 
+ * @author Dennis
+ */
 public class HostileDuplicateEffect extends ChaosEffectBase {
 
-	private ChaosPie plugin;
-	
-	public HostileDuplicateEffect(ChaosPie p) {
-		plugin = p;
-	}
-	
 	@Override
 	public void start() {
 		MessageChannel.TO_PLAYERS.send(Text.of(TextColors.RED, "Duplicate hostiles!"));
@@ -49,23 +45,15 @@ public class HostileDuplicateEffect extends ChaosEffectBase {
 	public int getWeight() {
 		return 30;
 	}
-	
-	@Listener
-	public void onEntityDeath(DestructEntityEvent.Death e, @First EntityDamageSource src) {
-		plugin.getLogger().info(e.getCause().toString());
-		if (!(e.getTargetEntity() instanceof Hostile)) return;
-		
-		Sponge.getCauseStackManager().addContext(EventContextKeys.SPAWN_TYPE, SpawnTypes.PLUGIN);
-		Living target = e.getTargetEntity();		
-		World w = target.getWorld();
-		Entity copy1 = w.createEntity(target.getType(), target.getLocation().getPosition());
-		Entity copy2 = w.createEntity(target.getType(), target.getLocation().getPosition());
-//		SpawnCause c = SpawnCause.builder().type(SpawnTypes.PLUGIN).build();
-//		
-//		w.spawnEntity(copy1, Cause.source(c).build());
-//		w.spawnEntity(copy2, Cause.source(c).build());
-		w.spawnEntity(copy1);
-		w.spawnEntity(copy2);
-	}
 
+	@Listener
+	public void onEntityDeath(DestructEntityEvent.Death e, @First EntityDamageSource source, @Getter("getTargetEntity") Hostile target) {
+		if (!(source.getSource() instanceof Player)) return;
+		ChaosPie.instance().getLogger().info(e.getCause().toString());
+
+		Sponge.getCauseStackManager().addContext(EventContextKeys.SPAWN_TYPE, SpawnTypes.PLUGIN);
+		World w = target.getWorld();
+		w.spawnEntity(w.createEntity(target.getType(), target.getLocation().getPosition()));
+		w.spawnEntity(w.createEntity(target.getType(), target.getLocation().getPosition()));
+	}
 }

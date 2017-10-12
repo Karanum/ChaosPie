@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
-import org.spongepowered.api.event.game.state.GamePostInitializationEvent;
+import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.event.game.state.GameStoppingServerEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.scheduler.Task;
@@ -18,6 +18,11 @@ import com.google.inject.Inject;
 
 import eu.teamtime.chaospie.effects.*;
 
+/**
+ * A pie that tastes like chaos. This is a plugin that adds a touch of chaotic mess into your server.
+ * 
+ * @author Dennis
+ */
 @Plugin(id = "chaospie", name = "ChaosPie", version = "0.1")
 public class ChaosPie {
 	
@@ -27,7 +32,7 @@ public class ChaosPie {
 	}
 	
 	private Task schedule = null;
-	private Task effectTask = null;
+	private Task stopper = null;
 	private List<ChaosEffectBase> effects = Lists.newArrayList();
 	private ChaosEffectBase activeEffect = null;
 	
@@ -40,20 +45,23 @@ public class ChaosPie {
 	@Listener
 	public void onInit(GameInitializationEvent e) {
 		instance = this;
-		
+
 		// TODO Make sure all effects are in
-		//effects.add(new HeliumPunchEffect(this));
-		effects.add(new HostileDuplicateEffect(this));
+		effects.add(new FloatingEffect());
+		effects.add(new HeliumPunchEffect());
+		effects.add(new HostileDuplicateEffect());
+		effects.add(new MiniCookEffect());
+		effects.add(new NascarEffect());
+		effects.add(new SpeedySpidersEffect());
 	}
 	
 	@Listener
-	public void onPostInit(GamePostInitializationEvent e) {
-		// TODO Replace with the usual 2 minute delay
+	public void onPostInit(GameStartedServerEvent e) {
 		schedule = Task.builder()
-				.execute(() -> startRandomChaosEvent())
-				//.delay(2, TimeUnit.MINUTES)
+				.execute(this::startRandomChaosEvent)
 				.delay(10, TimeUnit.SECONDS)
 				.interval(2, TimeUnit.MINUTES)
+				.name("ChaosPie-ChaosEffectScheduler")
 				.submit(this);
 	}
 	
@@ -61,10 +69,12 @@ public class ChaosPie {
 	public void onStop(GameStoppingServerEvent e) {
 		if (schedule != null)
 			schedule.cancel();
+		
+		stopCurrentEffect();
 	}
 	
 	
-	private void startRandomChaosEvent() {
+	public void startRandomChaosEvent() {
 		stopCurrentEffect();
 		
 		// Select event by random and weight
@@ -87,9 +97,10 @@ public class ChaosPie {
 		
 		int length = activeEffect.lengthInSeconds();
 		if (length > 0)
-			effectTask = Task.builder()
-					.execute(() -> stopCurrentEffect())
+			stopper = Task.builder()
+					.execute(this::stopCurrentEffect)
 					.delay(length, TimeUnit.SECONDS)
+					.name("ChaosPie-ChaosEffectStopper")
 					.submit(this);
 	}
 	
@@ -99,10 +110,9 @@ public class ChaosPie {
 		activeEffect.stop();
 		activeEffect = null;
 		
-		if (effectTask != null) {
-			effectTask.cancel();
-			effectTask = null;
+		if (stopper != null) {
+			stopper.cancel();
+			stopper = null;
 		}
 	}
-	
 }
