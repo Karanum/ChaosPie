@@ -56,7 +56,8 @@ public class ChaosPie {
 //		effects.add(new NascarEffect());
 //		effects.add(new SpeedySpidersEffect());
 //		effects.add(new SolarFlareEffect());
-		effects.add(new CakeCreeperEffect());
+//		effects.add(new CakeCreeperEffect());
+		effects.add(new FishingNightmareEffect());
 	}
 	
 	@Listener
