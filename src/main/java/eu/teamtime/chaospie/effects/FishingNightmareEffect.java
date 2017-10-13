@@ -55,7 +55,7 @@ public class FishingNightmareEffect extends ChaosEffectBase {
 
 	@Override
 	public int lengthInSeconds() {
-		return 120;
+		return 0;
 	}
 
 	@Override
