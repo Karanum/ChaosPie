@@ -31,6 +31,8 @@ import eu.teamtime.chaospie.effects.*;
 @Plugin(id = "chaospie", name = "ChaosPie", version = "0.1")
 public class ChaosPie {
 	
+	public static final int TIME_BETWEEN_EFFECTS = 120;
+	
 	private static ChaosPie instance;
 	public static ChaosPie instance() {
 		return instance;
@@ -72,7 +74,7 @@ public class ChaosPie {
 		schedule = Task.builder()
 				.execute(this::startRandomChaosEvent)
 				.delay(10, TimeUnit.SECONDS)
-				.interval(2, TimeUnit.MINUTES)
+				.interval(TIME_BETWEEN_EFFECTS, TimeUnit.SECONDS)
 				.name("ChaosPie-ChaosEffectScheduler")
 				.submit(this);
 	}

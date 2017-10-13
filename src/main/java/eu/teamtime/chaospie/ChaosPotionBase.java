@@ -49,7 +49,7 @@ public abstract class ChaosPotionBase extends ChaosEffectBase {
 	
 	public final int safeLengthInSeconds() {
 		int time = lengthInSeconds();
-		return (time <= 0 ? 120 : time);
+		return (time <= 0 ? ChaosPie.TIME_BETWEEN_EFFECTS : time);
 	}
 
 	protected abstract Text getStartText();
