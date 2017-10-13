@@ -27,6 +27,12 @@ import com.google.common.collect.Lists;
 import eu.teamtime.chaospie.ChaosEffectBase;
 import eu.teamtime.chaospie.ChaosPie;
 
+/**
+ * Chaos effect that makes all Item entities created through fishing explode
+ * when picked up by a Player, damaging them and destroying the item.
+ * 
+ * @author Karanum
+ */
 public class FishingNightmareEffect extends ChaosEffectBase {
 
 	private List<UUID> fishedItems;

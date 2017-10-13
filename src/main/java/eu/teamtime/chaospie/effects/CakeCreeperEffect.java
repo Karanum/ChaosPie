@@ -24,6 +24,12 @@ import org.spongepowered.api.text.format.TextColors;
 import eu.teamtime.chaospie.ChaosEffectBase;
 import eu.teamtime.chaospie.ChaosPie;
 
+/**
+ * Chaos effect that makes the first Creeper explosion (with a valid Player target)
+ * turn all dropped items into Cake.
+ * 
+ * @author Karanum
+ */
 public class CakeCreeperEffect extends ChaosEffectBase {
 
 	private Player winner;
