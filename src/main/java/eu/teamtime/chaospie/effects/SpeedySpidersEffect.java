@@ -24,7 +24,7 @@ import eu.teamtime.chaospie.ChaosPotionBase;
 public class SpeedySpidersEffect extends ChaosPotionBase {
 
 	private final Collection<PotionEffect> effects = Arrays.asList(PotionEffect.builder().amplifier(40)
-			.duration(lengthInSeconds()).potionType(PotionEffectTypes.SPEED).build());
+			.duration(safeLengthInSeconds()).potionType(PotionEffectTypes.SPEED).build());
 
 	@Override
 	public int lengthInSeconds() {

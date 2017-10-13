@@ -46,6 +46,11 @@ public abstract class ChaosPotionBase extends ChaosEffectBase {
 			}
 		}
 	}
+	
+	public final int safeLengthInSeconds() {
+		int time = lengthInSeconds();
+		return (time <= 0 ? 120 : time);
+	}
 
 	protected abstract Text getStartText();
 

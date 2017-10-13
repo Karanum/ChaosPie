@@ -22,7 +22,7 @@ import eu.teamtime.chaospie.ChaosPotionBase;
 public class FloatingEffect extends ChaosPotionBase {
 
 	private final Collection<PotionEffect> effects = Arrays.asList(PotionEffect.builder().amplifier(255)
-			.duration(lengthInSeconds()).potionType(PotionEffectTypes.LEVITATION).build());
+			.duration(safeLengthInSeconds()).potionType(PotionEffectTypes.LEVITATION).build());
 
 	@Override
 	public int lengthInSeconds() {

@@ -21,9 +21,9 @@ import eu.teamtime.chaospie.ChaosPotionBase;
 public class NascarEffect extends ChaosPotionBase {
 
 	private final Collection<PotionEffect> effects = Arrays.asList(
-			PotionEffect.builder().amplifier(60).duration(lengthInSeconds()).potionType(PotionEffectTypes.SPEED)
+			PotionEffect.builder().amplifier(60).duration(safeLengthInSeconds()).potionType(PotionEffectTypes.SPEED)
 					.build(),
-			PotionEffect.builder().amplifier(250).duration(lengthInSeconds()).potionType(PotionEffectTypes.JUMP_BOOST)
+			PotionEffect.builder().amplifier(250).duration(safeLengthInSeconds()).potionType(PotionEffectTypes.JUMP_BOOST)
 					.build());
 
 	@Override
