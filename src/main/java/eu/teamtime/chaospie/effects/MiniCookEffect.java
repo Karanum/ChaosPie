@@ -83,8 +83,7 @@ public class MiniCookEffect extends ChaosEffectBase {
 
 	@Override
 	public int lengthInSeconds() {
-		// TODO unspecified effect duration
-		return 120;
+		return 0;
 	}
 
 	@Override

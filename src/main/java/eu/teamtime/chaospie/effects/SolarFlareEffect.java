@@ -26,6 +26,13 @@ import com.flowpowered.math.vector.Vector3d;
 import eu.teamtime.chaospie.ChaosEffectBase;
 import eu.teamtime.chaospie.ChaosPie;
 
+/**
+ * Chaos effect that causes damage over time to all Living entities
+ * that are exposed to the sky. The interval between damage ticks
+ * decreases as the effect progresses.
+ * 
+ * @author Karanum
+ */
 public class SolarFlareEffect extends ChaosEffectBase {
 
 	private static final double INTERVAL_REGRESSION = 0.725;

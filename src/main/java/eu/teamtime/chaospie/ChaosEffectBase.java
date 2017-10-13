@@ -25,7 +25,9 @@ public abstract class ChaosEffectBase {
 	public abstract String getName();
 	
 	protected void stopSelf() {
-		ChaosPie.instance().stopCurrentEffect();
+		ChaosPie plugin = ChaosPie.instance();
+		if (plugin.getCurrentEffect() == this)
+			plugin.stopCurrentEffect();
 	}
 	
 	public boolean containsListeners() {

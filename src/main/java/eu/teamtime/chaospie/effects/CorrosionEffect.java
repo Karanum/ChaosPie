@@ -126,13 +126,12 @@ public class CorrosionEffect extends ChaosEffectBase {
 
 	@Override
 	public int lengthInSeconds() {
-		// TODO unspecified effect duration
-		return 120;
+		return 0;
 	}
 
 	@Override
 	public int getWeight() {
-		return 30;
+		return 10;
 	}
 
 	@Override

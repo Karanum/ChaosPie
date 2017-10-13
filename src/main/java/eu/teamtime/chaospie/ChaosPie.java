@@ -1,11 +1,13 @@
 package eu.teamtime.chaospie;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
@@ -18,6 +20,7 @@ import org.spongepowered.api.text.format.TextColors;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 
+import eu.teamtime.chaospie.commands.*;
 import eu.teamtime.chaospie.effects.*;
 
 /**
@@ -37,6 +40,7 @@ public class ChaosPie {
 	private Task stopper = null;
 	private List<ChaosEffectBase> effects = Lists.newArrayList();
 	private ChaosEffectBase activeEffect = null;
+	private EffectMetrics metrics = null;
 	
 	@Inject
 	private Logger logger;
@@ -56,6 +60,11 @@ public class ChaosPie {
 		effects.add(new NascarEffect());
 		effects.add(new SpeedySpidersEffect());
 		effects.add(new SolarFlareEffect());
+		effects.add(new CakeCreeperEffect());
+		effects.add(new FishingNightmareEffect());
+		
+		metrics = new EffectMetrics();
+		registerCommands();
 	}
 	
 	@Listener
@@ -77,17 +86,33 @@ public class ChaosPie {
 	}
 	
 	
+	public EffectMetrics getEffectMetrics() {
+		return metrics;
+	}
+	
+	public List<ChaosEffectBase> getAllEffects() {
+		return new ArrayList<>(effects);
+	}
+	
+	public ChaosEffectBase getCurrentEffect() {
+		return activeEffect;
+	}
+	
 	public void startRandomChaosEvent() {
+		List<ChaosEffectBase> validEffects = new ArrayList<>(effects);
+		if (activeEffect != null && effects.size() > 1)
+			validEffects.remove(activeEffect);
+		
 		stopCurrentEffect();
 		
 		// Select event by random and weight
 		int totalWeight = 0;
-		for (ChaosEffectBase effect : effects) {
+		for (ChaosEffectBase effect : validEffects) {
 			totalWeight += effect.getWeight();
 		}
 		
 		long randWeight = (new Random()).nextInt(totalWeight);
-		for (ChaosEffectBase effect : effects) {
+		for (ChaosEffectBase effect : validEffects) {
 			randWeight -= effect.getWeight();
 			if (randWeight <= 0) {
 				activeEffect = effect;
@@ -107,6 +132,8 @@ public class ChaosPie {
 					.delay(length, TimeUnit.SECONDS)
 					.name("ChaosPie-ChaosEffectStopper")
 					.submit(this);
+		
+		metrics.addEffectCount(activeEffect);
 	}
 	
 	public void stopCurrentEffect() {
@@ -121,5 +148,20 @@ public class ChaosPie {
 			stopper.cancel();
 			stopper = null;
 		}
+	}
+	
+	private void registerCommands() {
+		CommandSpec reportCommand = CommandSpec.builder()
+				.permission("chaospie.command.report")
+				.executor(new CommandReport())
+				.build();
+		
+		CommandSpec mainCommand = CommandSpec.builder()
+				.permission("chaospie.command.base")
+				.description(Text.of("Main command for ChaosPie"))
+				.child(reportCommand, "report")
+				.build();
+		
+		Sponge.getCommandManager().register(this, mainCommand, "chaos");
 	}
 }
