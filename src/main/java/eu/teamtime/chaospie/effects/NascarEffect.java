@@ -33,7 +33,7 @@ public class NascarEffect extends ChaosPotionBase {
 
 	@Override
 	public int getWeight() {
-		return 30;
+		return 20;
 	}
 
 	@Override

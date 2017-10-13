@@ -28,12 +28,12 @@ public class SpeedySpidersEffect extends ChaosPotionBase {
 
 	@Override
 	public int lengthInSeconds() {
-		return 120;
+		return 0;
 	}
 
 	@Override
 	public int getWeight() {
-		return 30;
+		return 20;
 	}
 
 	@Override

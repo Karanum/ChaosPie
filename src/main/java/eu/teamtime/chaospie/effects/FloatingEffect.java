@@ -26,7 +26,7 @@ public class FloatingEffect extends ChaosPotionBase {
 
 	@Override
 	public int lengthInSeconds() {
-		return 120;
+		return 0;
 	}
 
 	@Override
