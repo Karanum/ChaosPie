@@ -78,6 +78,10 @@ public class ChaosPie {
 	}
 	
 	
+	public ChaosEffectBase getCurrentEffect() {
+		return activeEffect;
+	}
+	
 	public void startRandomChaosEvent() {
 		stopCurrentEffect();
 		
