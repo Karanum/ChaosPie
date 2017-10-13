@@ -25,6 +25,8 @@ import eu.teamtime.chaospie.ChaosPie;
  */
 public class RocketJumperEffect extends ChaosEffectBase {
 
+	private static final double UPWARD_VELOCITY = 1.25;
+	
 	private Task task;
 	private Random random;
 	private Explosion.Builder explosionTemplate;
@@ -37,23 +39,20 @@ public class RocketJumperEffect extends ChaosEffectBase {
 	@Override
 	public void start() {
 		MessageChannel.TO_PLAYERS.send(Text.of(TextColors.RED, "Did you hear something? Get your market gardener ready!"));
-		cooldownPlayers = Lists.newArrayList();
-		task = Task.builder()
-				.delay(random.nextInt(1000) + 500, TimeUnit.MILLISECONDS)
-				.execute(() -> doTick())
-				.submit(ChaosPie.instance());
-		
+		cooldownPlayers = Lists.newArrayList();		
 		explosionTemplate = Explosion.builder()
 				.canCauseFire(false)
 				.shouldDamageEntities(false)
 				.shouldBreakBlocks(false)
 				.shouldPlaySmoke(true)
-				.radius(3);
+				.radius(0.5f);
+		
+		scheduleTask();
 	}
 
 	@Override
 	public void stop() {
-		MessageChannel.TO_PLAYERS.send(Text.of(TextColors.GREEN, "The explosions come to a stop. The market is closed for the day."));
+		MessageChannel.TO_PLAYERS.send(Text.of(TextColors.GREEN, "The explosions stop. The market is closed for the day."));
 		if (task != null)
 			task.cancel();
 	}
@@ -73,6 +72,13 @@ public class RocketJumperEffect extends ChaosEffectBase {
 		return "Rocket Jumper";
 	}
 	
+	private void scheduleTask() {
+		task = Task.builder()
+				.delay(random.nextInt(750) + 750, TimeUnit.MILLISECONDS)
+				.execute(() -> doTick())
+				.submit(ChaosPie.instance());
+	}
+	
 	private void doTick() {
 		Sponge.getCauseStackManager().pushCause(ChaosPie.instance());
 		List<Player> explodedPlayers = Lists.newArrayList();
@@ -80,20 +86,20 @@ public class RocketJumperEffect extends ChaosEffectBase {
 		for (Player p : Sponge.getServer().getOnlinePlayers()) {
 			if (cooldownPlayers.contains(p) || random.nextDouble() < 0.7)
 				continue;
-			
 			explodedPlayers.add(p);
-			Explosion explosion = explosionTemplate.location(p.getLocation()).build();
-			p.getWorld().triggerExplosion(explosion);
+			launchPlayer(p);
 		}
 		
 		Sponge.getCauseStackManager().popCause();
 		cooldownPlayers.clear();
 		cooldownPlayers = explodedPlayers;
-		
-		task = Task.builder()
-				.delay(random.nextInt(1000) + 500, TimeUnit.MILLISECONDS)
-				.execute(() -> doTick())
-				.submit(ChaosPie.instance());
+		scheduleTask();
+	}
+	
+	private void launchPlayer(Player p) {
+		Explosion explosion = explosionTemplate.location(p.getLocation()).build();
+		p.getWorld().triggerExplosion(explosion);
+		p.setVelocity(p.getVelocity().add(0, UPWARD_VELOCITY, 0));
 	}
 
 }
