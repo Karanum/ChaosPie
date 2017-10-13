@@ -1,5 +1,6 @@
 package eu.teamtime.chaospie;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -84,16 +85,20 @@ public class ChaosPie {
 	}
 	
 	public void startRandomChaosEvent() {
+		List<ChaosEffectBase> validEffects = new ArrayList<>(effects);
+		if (activeEffect != null && effects.size() > 1)
+			validEffects.remove(activeEffect);
+		
 		stopCurrentEffect();
 		
 		// Select event by random and weight
 		int totalWeight = 0;
-		for (ChaosEffectBase effect : effects) {
+		for (ChaosEffectBase effect : validEffects) {
 			totalWeight += effect.getWeight();
 		}
 		
 		long randWeight = (new Random()).nextInt(totalWeight);
-		for (ChaosEffectBase effect : effects) {
+		for (ChaosEffectBase effect : validEffects) {
 			randWeight -= effect.getWeight();
 			if (randWeight <= 0) {
 				activeEffect = effect;
